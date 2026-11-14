@@ -1,0 +1,20 @@
+{
+  "name": "Pink Spring",
+  "description": "soft pink + plum theme for spotify, flat, no shadows, no borders 🌸",
+  "preview": "preview.png",
+  "readme": "README.md",
+  "usercss": "user.css",
+  "schemes": "color.ini",
+  "authors": [
+    {
+      "name": "joycecler",
+      "url": "https://github.com/joycecler"
+    }
+  ],
+  "tags": [
+    "pink",
+    "pastel",
+    "light",
+    "flat"
+  ]
+}

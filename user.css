@@ -1,0 +1,2241 @@
+/*
+   pink spring 🌸
+   tema p/ spotify (spicetify) — rosinha, vinho e ameixa
+   by joycecler
+
+   cores: tudo nas variáveis --ps-* da seção 00
+   [instável] = classe c/ nome aleatório, pode quebrar qnd o spotify atualizar
+*/
+
+
+/* ─────────────────────────────────────────
+   00 · paleta
+   ───────────────────────────────────────── */
+
+:root {
+    --ps-bg: #F8E7EF;
+    --ps-sidebar: #F3D6E3;
+    --ps-surface: #F3DCE7;
+    --ps-card: #F3D6E3;
+    --ps-card-hover: #EABBD0;
+    --ps-selected: #EBC6D8;
+    --ps-player: #EFC7D8;
+    --ps-accent: #EBA6C7;
+    --ps-accent-hover: #D985AE;
+    --ps-accent-strong: #A45F83;   /* verificado, música tocando etc */
+    --ps-text: #553747;
+    --ps-text-soft: #68495B;
+    --ps-muted: #947487;
+    --ps-border: rgba(85, 55, 71, .13);
+    --ps-scroll: #D6AFC2;
+    --ps-scroll-hover: #B985A1;
+    --ps-soft-shadow: 0 6px 12px -10px rgba(85, 55, 71, .28);
+    --ps-header: #F0CDDD;          /* topo das playlists/álbuns */
+}
+
+/* cores internas do spotify (encore) — o body vem c/ tema escuro, então sobrescrevo direto */
+:root,
+.encore-dark-theme,
+.encore-dark-theme .encore-base-set {
+    --background-base: var(--ps-bg) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-press: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-surface) !important;
+    --background-elevated-highlight: var(--ps-card-hover) !important;
+    --background-elevated-press: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-card) !important;
+    --background-tinted-highlight: var(--ps-card-hover) !important;
+    --background-tinted-press: var(--ps-card-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-muted) !important;
+    --text-bright-accent: var(--ps-accent-strong) !important;
+    --essential-base: var(--ps-text) !important;
+    --essential-subdued: var(--ps-muted) !important;
+    --essential-bright-accent: var(--ps-accent-strong) !important;
+    --text-positive: var(--ps-accent-strong) !important;      /* era verde */
+    --essential-positive: var(--ps-accent-strong) !important;
+    --essential-announcement: var(--ps-accent-strong) !important;   /* azul do foco/avisos */
+    --text-announcement: var(--ps-accent-strong) !important;
+    --decorative-announcement: var(--ps-accent-strong) !important;
+    --decorative-base: var(--ps-border) !important;   /* divisórias bem suaves */
+    --decorative-subdued: var(--ps-border) !important;
+}
+
+/* botões de play eram verdes por causa disso */
+.encore-bright-accent-set,
+.encore-dark-theme .encore-bright-accent-set {
+    --background-base: var(--ps-accent) !important;
+    --background-highlight: var(--ps-accent-hover) !important;
+    --background-press: var(--ps-accent-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --essential-base: var(--ps-text) !important;
+}
+
+html,
+body {
+    background: var(--ps-bg) !important;
+    color: var(--ps-text) !important;
+    font-family: "Segoe UI", sans-serif !important;
+}
+
+
+/* ─────────────────────────────────────────
+   01 · fundo e estrutura
+   ───────────────────────────────────────── */
+
+#main,
+.Root,
+.Root__top-container,
+.Root__main-view,
+.main-view-container,
+.main-view-container__scroll-node,
+.main-view-container__scroll-node-child,
+.main-gridContainer-homepageContent {
+    background: var(--ps-bg) !important;
+    color: var(--ps-text) !important;
+}
+
+/* respiro igual o da biblioteca */
+.Root__main-view {
+    padding-block: 8px 10px !important;
+}
+
+.main-view-container {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+.main-view-container__scroll-node {
+    scrollbar-color: var(--ps-scroll) transparent !important;
+}
+
+/* títulos das seções */
+.main-home-homeHeader,
+.main-home-header,
+.main-shelf-title,
+.main-cardHeader-text {
+    color: var(--ps-text) !important;
+    font-weight: 750 !important;
+    letter-spacing: -.45px !important;
+}
+
+
+/* ─────────────────────────────────────────
+   02 · barra de cima e busca
+   ───────────────────────────────────────── */
+
+/* barra transparente, só a camada de fundo tem cor (aparece ao rolar) */
+.main-topBar-container,
+.main-topBar-topbarContent {
+    background: transparent !important;
+}
+
+.main-topBar-background {
+    background: var(--ps-header) !important;
+    background-image: none !important;
+    --background-base: var(--ps-header) !important;
+}
+
+/* tira a linha escura embaixo dos filtros */
+.main-topBar-container,
+.main-topBar-background,
+.main-topBar-overlay {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.main-topBar-overlay {
+    background: transparent !important;
+}
+
+.main-topBar-container::before,
+.main-topBar-container::after,
+.main-topBar-background::before,
+.main-topBar-background::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* sem borda na barra */
+:is(.main-topBar-container, [data-testid="topbar-content-wrapper"]),
+:is(.main-topBar-container, [data-testid="topbar-content-wrapper"]) * {
+    border-bottom: 0 !important;
+    outline: 0 !important;
+}
+
+/* tema chapado = sem sombra */
+.Root__main-view *,
+.Root__main-view *::before,
+.Root__main-view *::after,
+.Root__nav-bar *,
+.Root__nav-bar *::before,
+.Root__nav-bar *::after {
+    box-shadow: none !important;
+}
+
+.main-topBar-button {
+    color: var(--ps-muted) !important;
+    transition: color .18s ease, background-color .18s ease !important;
+}
+
+.main-topBar-button:hover {
+    color: var(--ps-text) !important;
+}
+
+.main-topBar-searchBar,
+.x-searchInput-searchInput {
+    background: var(--ps-surface) !important;
+    border: 1px solid var(--ps-border) !important;
+    border-radius: 24px !important;
+    box-shadow: none !important;
+    color: var(--ps-text) !important;
+}
+
+.main-topBar-searchBar:hover,
+.x-searchInput-searchInput:hover,
+.main-topBar-searchBar:focus-within,
+.x-searchInput-searchInput:focus-within {
+    background: #FBEAF1 !important;
+    border-color: #D9A8C0 !important;
+}
+
+/* menu, voltar/avançar, carrinho, home */
+.Root__globalNav button {
+    color: var(--ps-text-soft) !important;
+    --text-base: var(--ps-text-soft) !important;
+    --text-subdued: var(--ps-text-soft) !important;
+    --essential-base: var(--ps-text-soft) !important;
+    transition: color .18s ease, background-color .18s ease !important;
+}
+
+.Root__globalNav button:hover {
+    color: var(--ps-text) !important;
+}
+
+.Root__globalNav button :is(svg, path) {
+    fill: currentColor !important;
+}
+
+.Root__globalNav button:is(:disabled, [aria-disabled="true"]) {
+    color: rgba(85, 55, 71, .3) !important;
+}
+
+/* bolinhas */
+.Root__globalNav button:is([class*="buttonSecondary"], [class*="button-secondary"], [data-encore-id="buttonSecondary"]),
+.Root__globalNav button[aria-label*="carrinho" i],
+.Root__globalNav button[aria-label*="loja" i],
+.Root__globalNav button[aria-label="Marketplace"],
+.Root__globalNav button.main-globalNav-link-icon,
+.Root__globalNav button[aria-label="Início"] {
+    background: var(--ps-surface) !important;
+    background-color: var(--ps-surface) !important;
+    border-radius: 50% !important;
+}
+
+.Root__globalNav button:is([class*="buttonSecondary"], [class*="button-secondary"], [data-encore-id="buttonSecondary"]):hover,
+.Root__globalNav button[aria-label*="carrinho" i]:hover,
+.Root__globalNav button[aria-label*="loja" i]:hover,
+.Root__globalNav button[aria-label="Marketplace"]:hover,
+.Root__globalNav button.main-globalNav-link-icon:hover,
+.Root__globalNav button[aria-label="Início"]:hover {
+    background: var(--ps-card-hover) !important;
+    background-color: var(--ps-card-hover) !important;
+}
+
+/* dica ctrl+l sem borrão */
+:is(.Root__globalNav, .main-globalNav-searchSection, .main-globalNav-searchContainer, form[role="search"]) kbd {
+    background: var(--ps-card-hover) !important;
+    color: var(--ps-text) !important;
+    border: 1px solid var(--ps-border) !important;
+    border-radius: 5px !important;
+    box-shadow: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+}
+
+:is(.Root__globalNav, .main-globalNav-searchSection, .main-globalNav-searchContainer, form[role="search"]) :has(> kbd),
+:is(.Root__globalNav, .main-globalNav-searchSection, .main-globalNav-searchContainer, form[role="search"]) :has(> kbd)::before,
+:is(.Root__globalNav, .main-globalNav-searchSection, .main-globalNav-searchContainer, form[role="search"]) :has(> kbd)::after {
+    background: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+}
+
+
+/* ─────────────────────────────────────────
+   03 · biblioteca
+   ───────────────────────────────────────── */
+
+.Root__nav-bar,
+.main-yourLibraryX-library,
+.main-yourLibraryX-container,
+.main-yourLibraryX-libraryContainer,
+.main-yourLibraryX-libraryRootlist,
+.main-yourLibraryX-libraryItemContainer,
+.main-yourLibraryX-header,
+.main-yourLibraryX-filterArea {
+    background: var(--ps-sidebar) !important;
+    color: var(--ps-text) !important;
+}
+
+/* respiro em cima/embaixo da caixa */
+.Root__nav-bar {
+    background: transparent !important;
+    border-right: 0 !important;
+    padding-block: 8px 10px !important;
+}
+
+.main-yourLibraryX-library,
+.main-yourLibraryX-libraryContainer {
+    border-radius: 12px !important;
+}
+
+.main-yourLibraryX-header {
+    padding: 16px 14px 10px !important;
+    border: none !important;
+}
+
+.main-yourLibraryX-header h1 {
+    color: var(--ps-text) !important;
+    font-size: 16px !important;
+    font-weight: 750 !important;
+    letter-spacing: -.4px !important;
+}
+
+.main-yourLibraryX-header button,
+.main-yourLibraryX-entryPoints button {
+    color: var(--ps-muted) !important;
+    transition: color .18s ease, background-color .18s ease !important;
+}
+
+.main-yourLibraryX-header button:hover,
+.main-yourLibraryX-entryPoints button:hover {
+    color: var(--ps-text) !important;
+    background: var(--ps-card-hover) !important;
+}
+
+.main-yourLibraryX-filterArea {
+    padding: 0 14px 12px !important;
+}
+
+.main-yourLibraryX-filterArea [class*="legacy-chip"] {
+    background: var(--ps-surface) !important;
+    color: var(--ps-text-soft) !important;
+    border-radius: 24px !important;
+    transition: background-color .18s ease, color .18s ease !important;
+}
+
+.main-yourLibraryX-filterArea [class*="legacy-chip"]:hover {
+    background: var(--ps-card-hover) !important;
+    color: var(--ps-text) !important;
+}
+
+.main-yourLibraryX-filterArea [class*="legacy-chip"][aria-checked="true"] {
+    background: var(--ps-accent) !important;
+    color: #45283A !important;
+}
+
+/* busca da biblioteca: uma caixa só */
+.x-filterBox-filterInputContainer {
+    background: var(--ps-surface) !important;
+    border: 1px solid var(--ps-border) !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    transition: background-color .18s ease, border-color .18s ease !important;
+}
+
+.x-filterBox-filterInputContainer:hover {
+    background: #FBEAF1 !important;
+}
+
+.x-filterBox-filterInputContainer:focus-within {
+    background: #FBEAF1 !important;
+    border-color: var(--ps-accent) !important;
+}
+
+.x-filterBox-filterInput,
+.x-filterBox-filterInput:hover,
+.x-filterBox-filterInput:focus {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 24px !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    color: var(--ps-text) !important;
+}
+
+.x-filterBox-filterInput::placeholder {
+    color: var(--ps-muted) !important;
+    opacity: 1 !important;
+}
+
+.x-filterBox-searchIcon,
+.x-filterBox-filterInputContainer svg {
+    color: var(--ps-muted) !important;
+    fill: var(--ps-muted) !important;
+}
+
+/* botão recentes */
+:is(.x-sortBox-sortDropdown, .main-yourLibraryX-rootListHeader button:has([data-encore-id="text"])) {
+    padding: 4px 10px 4px 12px !important;
+    gap: 6px !important;
+    border-radius: 24px !important;
+    color: var(--ps-muted) !important;
+    transition: background-color .18s ease, color .18s ease !important;
+}
+
+:is(.x-sortBox-sortDropdown, .main-yourLibraryX-rootListHeader button:has([data-encore-id="text"])):hover {
+    background: var(--ps-card-hover) !important;
+    color: var(--ps-text) !important;
+}
+
+.main-yourLibraryX-libraryRootlist {
+    padding: 4px 10px 14px !important;
+}
+
+.main-yourLibraryX-listItem {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 9px !important;
+    margin: 2px 0 !important;
+    transition: background-color .18s ease, border-color .18s ease !important;
+    color: var(--ps-text) !important;
+}
+
+.main-yourLibraryX-listItem:hover {
+    background: var(--ps-card-hover) !important;
+    border-color: var(--ps-border) !important;
+}
+
+.main-yourLibraryX-listItem[aria-selected="true"] {
+    background: var(--ps-selected) !important;
+}
+
+.main-yourLibraryX-listItem [data-encore-id="text"],
+.main-yourLibraryX-listItem [class*="legacy-list-row-title"] {
+    color: var(--ps-text) !important;
+}
+
+.main-yourLibraryX-listItem [class*="subtitle"],
+.main-yourLibraryX-listItem [class*="Subtitle"],
+.main-yourLibraryX-listItem [class*="legacy-list-row-details"] {
+    color: var(--ps-muted) !important;
+}
+
+.main-yourLibraryX-listItem .x-entityImage-imageContainer,
+.main-yourLibraryX-listItem img {
+    border-radius: 7px !important;
+    overflow: hidden !important;
+}
+
+
+/* ─────────────────────────────────────────
+   04 · home
+   ───────────────────────────────────────── */
+
+/* cards (vars no card e nos filhos p/ o hover n voltar pro escuro) */
+.main-card-card,
+.main-card-cardContainer {
+    background: var(--ps-card) !important;
+    color: var(--ps-text) !important;
+    border: none !important;
+    border-radius: 11px !important;
+    box-shadow: none !important;
+    --background-base: var(--ps-card) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-press: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-card) !important;
+    --background-elevated-highlight: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-card) !important;
+    --background-tinted-highlight: var(--ps-card-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-muted) !important;
+    transition: background-color .18s ease, border-color .18s ease !important;
+}
+
+/* espaço entre os cards */
+:is(.main-card-card, .main-card-cardContainer):not(:is(.main-card-card, .main-card-cardContainer) *) {
+    margin-inline: 6px !important;
+}
+
+.main-card-card:hover,
+.main-card-card:focus-within,
+.main-card-cardContainer:hover,
+.main-card-cardContainer:focus-within {
+    background: var(--ps-card-hover) !important;
+    color: var(--ps-text) !important;
+    --background-base: var(--ps-card-hover) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-press: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-card-hover) !important;
+    --background-elevated-highlight: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-card-hover) !important;
+    --background-tinted-highlight: var(--ps-card-hover) !important;
+}
+
+.main-card-card *,
+.main-card-cardContainer * {
+    --background-base: var(--ps-card) !important;
+    --background-elevated-base: var(--ps-card) !important;
+    --background-tinted-base: var(--ps-card) !important;
+}
+
+.main-card-card:hover *,
+.main-card-cardContainer:hover * {
+    --background-base: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-card-hover) !important;
+}
+
+.main-cardImage-image,
+.main-card-imageContainer,
+.main-card-card img {
+    border-radius: 7px !important;
+    box-shadow: none !important;
+}
+
+.main-cardHeader-text,
+.main-card-card h2,
+.main-card-card a,
+.main-card-cardContainer h2,
+.main-card-cardContainer a {
+    color: var(--ps-text) !important;
+    font-weight: 650 !important;
+}
+
+.main-cardSubHeader-root,
+.main-card-card [class*="subtitle"],
+.main-card-cardContainer [class*="subtitle"] {
+    color: var(--ps-muted) !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+}
+
+.main-card-card:hover a,
+.main-card-card:hover span,
+.main-card-cardContainer:hover a,
+.main-card-cardContainer:hover span {
+    color: var(--ps-text) !important;
+}
+
+/* atalhos do topo */
+.view-homeShortcutsGrid {
+    gap: 10px !important;
+}
+
+.view-homeShortcutsGrid-shortcut {
+    background: var(--ps-card) !important;
+    color: var(--ps-text) !important;
+    border-radius: 9px !important;
+    transition: background-color .18s ease !important;
+}
+
+.view-homeShortcutsGrid-shortcut:hover,
+.view-homeShortcutsGrid-shortcut:focus-within {
+    background: var(--ps-card-hover) !important;
+}
+
+.view-homeShortcutsGrid-shortcut * {
+    color: var(--ps-text) !important;
+}
+
+/* espaçamentos */
+.main-gridContainer-homepageContent {
+    padding: 18px 22px !important;
+}
+
+.main-gridContainer-gridContainer {
+    row-gap: 22px !important;
+}
+
+.main-shelf-shelf,
+.main-shelf {
+    margin-block-end: 22px !important;
+}
+
+.main-shelf-header,
+.main-shelf-titleContainer {
+    margin-block-end: 10px !important;
+}
+
+.main-shelf-title {
+    margin-bottom: 12px !important;
+    font-size: 21px !important;
+}
+
+/* fix: tirinha colorida no topo da home */
+.main-home-homeHeader {
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* pontas dos carrosséis esmaecendo pro rosa */
+.search-searchCategory-contentArea::before {
+    background-image: linear-gradient(90deg, var(--ps-bg) 0%, rgba(248, 231, 239, 0) 100%) !important;
+}
+
+.search-searchCategory-contentArea::after {
+    background-image: linear-gradient(-90deg, var(--ps-bg) 0%, rgba(248, 231, 239, 0) 100%) !important;
+}
+
+/* filtros (tudo / música / podcasts...) */
+.main-home-filterChipsContainer,
+.main-home-filterChipsSection,
+.main-home-filterChipsContainer .search-searchCategory-contentArea {
+    background: var(--ps-bg) !important;
+}
+
+.main-home-filterChipsContainer,
+.main-home-filterChipsSection,
+.main-home-filterChipsContainer .search-searchCategory-contentArea,
+.main-home-filterChipsContainer .search-searchCategory-categoryGrid,
+.main-home-homeHeader,
+.main-home-homeHeader + div {
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+}
+
+.main-home-filterChipsContainer::before,
+.main-home-filterChipsContainer::after,
+.main-home-filterChipsSection::before,
+.main-home-filterChipsSection::after {
+    content: none !important;
+    display: none !important;
+}
+
+.main-home-filterChipsContainer button[data-encore-id="chip"] {
+    background: var(--ps-card) !important;
+    color: var(--ps-text) !important;
+    border-radius: 24px !important;
+}
+
+.main-home-filterChipsContainer button[data-encore-id="chip"]:hover {
+    background: var(--ps-card-hover) !important;
+}
+
+.main-home-filterChipsContainer button[data-encore-id="chip"][aria-checked="true"] {
+    background: var(--ps-accent) !important;
+    color: #fff !important;
+}
+
+
+/* filtros em pílula — a cor fica no miolo */
+
+button[class*="chip"]:has([class*="chip__inner"]) {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+button[class*="chip"] [class*="chip__inner"] {
+    background: var(--ps-card) !important;
+    background-color: var(--ps-card) !important;
+    color: var(--ps-text) !important;
+    transition: background-color .18s ease, color .18s ease !important;
+}
+
+button[class*="chip"]:hover [class*="chip__inner"] {
+    background: var(--ps-card-hover) !important;
+    background-color: var(--ps-card-hover) !important;
+}
+
+button[class*="chip"]:is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]) [class*="chip__inner"] {
+    background: var(--ps-text) !important;
+    background-color: var(--ps-text) !important;
+    color: #FBEAF1 !important;
+}
+
+button[class*="chip"]:is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]):hover [class*="chip__inner"] {
+    background: var(--ps-text-soft) !important;
+    background-color: var(--ps-text-soft) !important;
+}
+
+button[class*="chip"] [class*="chip__inner"] * {
+    color: inherit !important;
+}
+
+/* filtros da biblioteca (um tom acima do fundo) */
+.main-yourLibraryX-library.main-yourLibraryX-library :has(> [class*="chip__inner"]) {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.main-yourLibraryX-library.main-yourLibraryX-library [class*="chip__inner"] {
+    background: var(--ps-selected) !important;
+    background-color: var(--ps-selected) !important;
+    color: var(--ps-text) !important;
+}
+
+.main-yourLibraryX-library.main-yourLibraryX-library :has(> [class*="chip__inner"]):hover > [class*="chip__inner"] {
+    background: var(--ps-card-hover) !important;
+    background-color: var(--ps-card-hover) !important;
+}
+
+.main-yourLibraryX-library.main-yourLibraryX-library :is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]) > [class*="chip__inner"] {
+    background: var(--ps-text) !important;
+    background-color: var(--ps-text) !important;
+    color: #FBEAF1 !important;
+}
+
+.main-yourLibraryX-library.main-yourLibraryX-library :is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]):hover > [class*="chip__inner"] {
+    background: var(--ps-text-soft) !important;
+    background-color: var(--ps-text-soft) !important;
+}
+
+/* ─────────────────────────────────────────
+   05 · card grande c/ foto (feito p/ vc, p/ fãs de...)
+   ───────────────────────────────────────── */
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) {
+    --text-base: #FFFFFF !important;
+    --text-subdued: rgba(255, 255, 255, .82) !important;
+    --essential-base: #FFFFFF !important;
+    --essential-subdued: rgba(255, 255, 255, .82) !important;
+}
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) :is(h1, h2, h3, p, span, a, [data-encore-id="text"]) {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 8px rgba(35, 16, 27, .65) !important;
+}
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) :is(p, span):not(h2 *) {
+    color: rgba(255, 255, 255, .85) !important;
+}
+
+/* ícones brancos, menos o play */
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button:not([data-encore-id="buttonPrimary"]) svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    filter: drop-shadow(0 1px 3px rgba(35, 16, 27, .55)) !important;
+}
+
+
+/* ouvir prévia */
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button[data-testid="big-card-toggle-preview-button"],
+button[data-testid="big-card-toggle-preview-button"] {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+    color: var(--ps-text) !important;
+    border: 0 !important;
+    border-radius: 24px !important;
+    filter: none !important;
+    --text-base: var(--ps-text) !important;
+    --essential-base: var(--ps-text) !important;
+}
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button[data-testid="big-card-toggle-preview-button"]:hover,
+button[data-testid="big-card-toggle-preview-button"]:hover {
+    background: var(--ps-accent-hover) !important;
+    background-color: var(--ps-accent-hover) !important;
+}
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button[data-testid="big-card-toggle-preview-button"] :is(span, svg, path),
+button[data-testid="big-card-toggle-preview-button"] :is(span, svg, path) {
+    color: var(--ps-text) !important;
+    fill: var(--ps-text) !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+
+/* play e setinhas em vinho */
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) [data-encore-id="buttonPrimary"],
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button:has(path[d^="M4.97.47"]),
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button:has(path[d^="M11.03.47"]) {
+    --text-base: var(--ps-text) !important;
+    --essential-base: var(--ps-text) !important;
+    color: var(--ps-text) !important;
+}
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) [data-encore-id="buttonPrimary"] :is(svg, path),
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button:has(path[d^="M4.97.47"]) :is(svg, path),
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) button:has(path[d^="M11.03.47"]) :is(svg, path) {
+    color: var(--ps-text) !important;
+    fill: var(--ps-text) !important;
+    filter: none !important;
+}
+
+
+/* bolinha da seta */
+.Root__top-container .Root__main-view .search-searchCategory-carouselButton {
+    background: var(--ps-card-hover) !important;
+    background-color: var(--ps-card-hover) !important;
+    box-shadow: none !important;
+    transition: background-color .18s ease !important;
+}
+
+.Root__top-container .Root__main-view .search-searchCategory-carouselButton:hover {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+}
+
+/* setas dos carrosséis */
+.search-searchCategory-carouselButton,
+.Root__top-container .Root__main-view button:has(path[d^="M4.97.47"]),
+.Root__top-container .Root__main-view button:has(path[d^="M11.03.47"]) {
+    --text-base: var(--ps-text) !important;
+    --essential-base: var(--ps-text) !important;
+    color: var(--ps-text) !important;
+}
+
+.Root__top-container .Root__main-view .search-searchCategory-carouselButton :is(svg, path),
+.Root__top-container .Root__main-view button:has(path[d^="M4.97.47"]) :is(svg, path),
+.Root__top-container .Root__main-view button:has(path[d^="M11.03.47"]) :is(svg, path) {
+    color: var(--ps-text) !important;
+    fill: var(--ps-text) !important;
+    filter: none !important;
+}
+
+
+/* ─────────────────────────────────────────
+   05b · navegar: cards coloridos
+   ───────────────────────────────────────── */
+
+:is(.x-categoryCard-CategoryCard, .main-shelf-shelfGrid a > div[style*="background"]) {
+    --text-base: #FFFFFF !important;
+    --text-subdued: rgba(255, 255, 255, .85) !important;
+    --essential-base: #FFFFFF !important;
+}
+
+:is(.x-categoryCard-CategoryCard, .main-shelf-shelfGrid a > div[style*="background"]) :is(span, p, h2, h3, a, [data-encore-id="text"]) {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 4px rgba(35, 16, 27, .35) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   06 · playlists, álbuns e artistas
+   ───────────────────────────────────────── */
+
+.main-entityHeader-container,
+.main-entityHeader-background,
+.main-entityHeader-overlay {
+    background: var(--ps-header) !important;
+    opacity: 1 !important;
+}
+
+/* fundo do cabeçalho (álbum/single tb) */
+.main-entityHeader-backgroundColor,
+[data-testid="entity-header"],
+[data-testid="entity-header"] [class*="ackground"],
+[data-testid="entity-header"] [style*="background"],
+[data-testid="entity-header"] [style*="--background"] {
+    background-color: var(--ps-header) !important;
+    background-image: none !important;
+    --background-base: var(--ps-header) !important;
+}
+
+/* espaçamento apertado só no título grande */
+.main-entityHeader-headerText {
+    color: var(--ps-text) !important;
+}
+
+.main-entityHeader-headerText h1,
+.main-entityHeader-title h1 {
+    font-weight: 800 !important;
+    letter-spacing: -1.6px !important;
+}
+
+/* degradê atrás da barra de ações */
+/* na paleta */
+[class*="actionBarBackground-background"] {
+    background-color: transparent !important;
+    background-image: linear-gradient(180deg, var(--ps-header) 0%, var(--ps-bg) 100%) !important;
+
+    --background-base: var(--ps-bg) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-press: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-surface) !important;
+    --background-tinted-base: var(--ps-card) !important;
+}
+
+[class*="actionBarBackground-background"]::before,
+[class*="actionBarBackground-background"]::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* ícones da barra de ações */
+.main-actionBar-ActionBar {
+    --text-subdued: var(--ps-text-soft) !important;
+}
+
+.main-actionBar-ActionBar [data-encore-id="buttonTertiary"] {
+    opacity: 1 !important;
+}
+
+/* respiro no cabeçalho */
+.main-entityHeader-contentWrapper {
+    padding-top: 28px !important;
+    padding-bottom: 24px !important;
+}
+
+.main-entityHeader-headerText {
+    display: flex !important;
+    flex-direction: column !important;
+    row-gap: 10px !important;
+}
+
+.main-entityHeader-headerText h1 {
+    margin: 0 !important;
+    padding-block: 2px 4px !important;
+}
+
+.main-entityHeader-metaData {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    column-gap: 6px !important;
+    row-gap: 4px !important;
+}
+
+/* bolinhas separadoras repetidas */
+.main-entityHeader-divider + .main-entityHeader-divider,
+.main-entityHeader-metaData > .main-entityHeader-divider:last-child {
+    display: none !important;
+}
+
+.main-entityHeader-metaData,
+.main-entityHeader-detailsText {
+    color: var(--ps-muted) !important;
+}
+
+/* texto apagado do cabeçalho legível em qlqr capa */
+.main-entityHeader-headerText,
+.main-entityHeader-headerText *,
+.main-entityHeader-metaData,
+.main-entityHeader-metaData * {
+    --text-subdued: var(--ps-text-soft) !important;
+}
+
+.main-entityHeader-metaDataTextSubdued,
+.main-entityHeader-metaDataTextSubdued *,
+.main-entityHeader-metaData .encore-internal-color-text-subdued {
+    color: var(--ps-text-soft) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   07 · lista de músicas
+   ───────────────────────────────────────── */
+
+.main-trackList-trackListRow {
+    border-radius: 7px !important;
+    transition: background-color .16s ease !important;
+}
+
+.main-trackList-trackListRow:hover {
+    background: var(--ps-card-hover) !important;
+}
+
+.main-trackList-trackListRow[aria-selected="true"] {
+    background: var(--ps-selected) !important;
+}
+
+.main-trackList-trackListRow .main-trackList-rowTitle {
+    color: var(--ps-text) !important;
+}
+
+.main-trackList-trackListRow .main-trackList-rowSubTitle {
+    color: var(--ps-muted) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   08 · tocando agora: estrutura
+   ───────────────────────────────────────── */
+
+.main-nowPlayingView {
+    background: var(--ps-bg) !important;
+    color: var(--ps-text) !important;
+    padding: 12px !important;
+}
+
+.main-nowPlayingView > * {
+    color: var(--ps-text);
+}
+
+.main-nowPlayingView img {
+    border-radius: 9px !important;
+}
+
+.main-nowPlayingView,
+.main-nowPlayingView > div,
+.main-nowPlayingView [class*="scroll"],
+.main-nowPlayingView [class*="Scroll"] {
+    scrollbar-color: var(--ps-scroll) transparent !important;
+}
+
+/* sem sombra no cabeçalho */
+.Root__right-sidebar *,
+.Root__right-sidebar *::before,
+.Root__right-sidebar *::after {
+    box-shadow: none !important;
+}
+
+/* espaço entre os blocos [instável] */
+.main-nowPlayingView .bl1InWV_jfGCXZVygaOG {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 9px !important;
+    padding: 0 0 14px !important;
+}
+
+.main-nowPlayingView .main-nowPlayingView-section {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+/* títulos das seções do painel */
+.main-nowPlayingView .main-nowPlayingView-sectionHeader,
+.main-nowPlayingView .main-nowPlayingView-sectionHeader h2,
+.main-nowPlayingView .main-nowPlayingView-sectionHeader h2 *,
+.main-nowPlayingView .main-nowPlayingView-sectionHeader [data-encore-id="text"] {
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--ps-text) !important;
+    text-shadow: none !important;
+}
+
+
+/* ─────────────────────────────────────────
+   09 · tocando agora: título e artista
+   ───────────────────────────────────────── */
+
+/* infos à esq, ações à dir */
+.main-nowPlayingView-contextItemInfo {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    justify-content: initial !important;
+    column-gap: 8px !important;
+    row-gap: 2px !important;
+    padding: 5px 8px 0 !important;
+    margin: 0 0 2px !important;
+}
+
+.main-nowPlayingView-contextItemInfo .main-trackInfo-name {
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+}
+
+.main-nowPlayingView-contextItemInfo .main-trackInfo-name > div,
+.main-nowPlayingView-contextItemInfo .main-trackInfo-artists {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.3 !important;
+}
+
+/* sem recuo e sem borrão no título */
+.main-nowPlayingView-contextItemInfo .main-trackInfo-name,
+.main-nowPlayingView-contextItemInfo .main-trackInfo-name :is(div, span, a, h1, h2, [data-encore-id="text"]) {
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+    text-indent: 0 !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+}
+
+.main-trackInfo-name a,
+.main-trackInfo-name a span,
+.main-trackInfo-name [data-encore-id="text"] {
+    color: var(--ps-text) !important;
+    text-decoration: none !important;
+}
+
+.main-trackInfo-name a:hover {
+    color: var(--ps-accent-strong) !important;
+    text-decoration: underline !important;
+}
+
+.main-trackInfo-artists,
+.main-trackInfo-artists a,
+.main-trackInfo-artists span {
+    color: var(--ps-muted) !important;
+}
+
+.main-nowPlayingWidget-plusButtonWrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    margin: 0 !important;
+}
+
+.main-nowPlayingView-contextItemInfo .main-nowPlayingWidget-plusButtonWrapper {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    flex-wrap: nowrap !important;
+    padding: 0 !important;
+}
+
+.main-nowPlayingWidget-plusButtonWrapper button {
+    color: var(--ps-muted) !important;
+}
+
+.main-nowPlayingWidget-plusButtonWrapper button:hover {
+    color: #B75F91 !important;
+}
+
+
+/* ─────────────────────────────────────────
+   10 · tocando agora: prévia da letra
+   ───────────────────────────────────────── */
+
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] {
+    background: var(--ps-surface) !important;
+    color: var(--ps-text) !important;
+    border-radius: 15px !important;
+    padding: 13px 15px !important;
+    margin: 0 8px 10px !important;
+    box-shadow: none !important;
+
+    --lyrics-color-active: #573D4E !important;
+    --lyrics-color-inactive: #947487 !important;
+    --lyrics-color-passed: #B99EAE !important;
+    --lyrics-color-background: var(--ps-surface) !important;
+}
+
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .main-nowPlayingView-sectionHeader {
+    margin: 0 0 7px !important;
+    padding: 0 !important;
+}
+
+/* sem borrão do spotify */
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] *,
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] *::before,
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] *::after {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    filter: none !important;
+    text-shadow: none !important;
+}
+
+/* esmaecido só embaixo */
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .main-nowPlayingView-sectionHeader + * {
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%) !important;
+    mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%) !important;
+}
+
+/* sem vão entre título e letra */
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .main-nowPlayingView-sectionHeader ~ *,
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .main-nowPlayingView-sectionHeader ~ * > :first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* [instável] */
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .ZZZvR59MO7b3EXPV7ZmC {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .J4_kkGYm5hjbZlztykxr {
+    margin: 0 !important;
+    padding: 2px 0 !important;
+    line-height: 1.45 !important;
+}
+
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .Dn2b5rh5_6c7YvX5uyak {
+    color: var(--ps-muted) !important;
+}
+
+/* mostrar mais [instável] */
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .J0duESvD6oi4iMhOpj8b {
+    margin-top: 8px !important;
+}
+
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .J0duESvD6oi4iMhOpj8b button {
+    background: var(--ps-selected) !important;
+    color: var(--ps-text) !important;
+    border: none !important;
+    border-radius: 22px !important;
+}
+
+.main-nowPlayingView-section[data-testid="lyrics-npv-section"] .J0duESvD6oi4iMhOpj8b button:hover {
+    background: var(--ps-accent) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   11 · tocando agora: videoclipes
+   ───────────────────────────────────────── */
+
+.main-nowPlayingView .main-nowPlayingView-musicVideo {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: transparent !important;
+    margin: 8px 0 14px !important;
+    padding: 0 !important;
+
+    /* título do clipe sumia */
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-muted) !important;
+    --essential-base: var(--ps-text) !important;
+}
+
+.main-nowPlayingView .main-nowPlayingView-musicVideo .main-nowPlayingView-sectionHeader {
+    margin: 0 0 8px !important;
+    padding: 0 2px !important;
+}
+
+.main-nowPlayingView .main-nowPlayingView-musicVideo [class*="card"],
+.main-nowPlayingView .main-nowPlayingView-musicVideo [class*="Card"] {
+    background: var(--ps-card) !important;
+    color: var(--ps-text) !important;
+    border-radius: 11px !important;
+    box-shadow: none !important;
+    --background-base: var(--ps-card) !important;
+    --background-elevated-base: var(--ps-card) !important;
+    --background-tinted-base: var(--ps-card) !important;
+    transition: background-color .18s ease !important;
+}
+
+.main-nowPlayingView .main-nowPlayingView-musicVideo [class*="card"]:hover,
+.main-nowPlayingView .main-nowPlayingView-musicVideo [class*="Card"]:hover {
+    background: var(--ps-card-hover) !important;
+    --background-base: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-card-hover) !important;
+}
+
+
+.main-nowPlayingView .main-nowPlayingView-musicVideo :is(a, span, p, h3, h4, [data-encore-id="text"]) {
+    color: var(--ps-text) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* artista mais suave */
+.main-nowPlayingView .main-nowPlayingView-musicVideo :is([class*="subtitle" i], [class*="subtitle" i] *) {
+    color: var(--ps-muted) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   12 · tocando agora: sobre o artista
+   ───────────────────────────────────────── */
+
+.main-nowPlayingView-aboutArtist {
+    background: var(--ps-surface) !important;
+    color: var(--ps-text) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    margin: 8px 0 16px !important;
+    box-shadow: none !important;
+}
+
+/* texto embaixo da foto [instável] */
+.main-nowPlayingView-aboutArtist .wqRf3uZh8pUe125CRGFh {
+    background: var(--ps-surface) !important;
+    color: var(--ps-text) !important;
+    padding: 14px 16px !important;
+}
+
+.main-nowPlayingView-aboutArtist a,
+.main-nowPlayingView-aboutArtist a span {
+    color: var(--ps-text) !important;
+}
+
+.main-nowPlayingView-aboutArtist [class*="listener"],
+.main-nowPlayingView-aboutArtist [class*="Listener"],
+.main-nowPlayingView-aboutArtist [class*="description"],
+.main-nowPlayingView-aboutArtist [class*="Description"],
+.main-nowPlayingView-aboutArtist p {
+    color: var(--ps-muted) !important;
+    text-shadow: none !important;
+}
+
+/* título em cima da foto */
+.main-nowPlayingView-aboutArtist .main-nowPlayingView-sectionHeader {
+    position: relative !important;
+    z-index: 2 !important;
+    padding: 16px !important;
+    background: transparent !important;
+}
+
+.main-nowPlayingView-aboutArtist .main-nowPlayingView-sectionHeader h2,
+.main-nowPlayingView-aboutArtist .main-nowPlayingView-sectionHeader h2 *,
+.main-nowPlayingView-aboutArtist .main-nowPlayingView-sectionHeader button,
+.main-nowPlayingView-aboutArtist .main-nowPlayingView-sectionHeader button span,
+.main-nowPlayingView-aboutArtist .main-nowPlayingView-sectionHeader [data-encore-id="text"] {
+    color: #FFFFFF !important;
+    font-weight: 750 !important;
+    text-shadow: 0 1px 5px rgba(35, 16, 27, .8) !important;
+}
+
+/* selo verificado */
+.main-nowPlayingView-aboutArtist svg {
+    color: var(--ps-accent-strong) !important;
+    fill: var(--ps-accent-strong) !important;
+    opacity: 1 !important;
+}
+
+.main-nowPlayingView-aboutArtist button[data-encore-id="buttonSecondary"] {
+    background: #E5BBD0 !important;
+    color: var(--ps-text) !important;
+    border: none !important;
+    border-radius: 22px !important;
+}
+
+.main-nowPlayingView-aboutArtist button[data-encore-id="buttonSecondary"]:hover {
+    background: var(--ps-accent) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   13 · tocando agora: créditos [instável]
+   ───────────────────────────────────────── */
+
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) {
+    background: var(--ps-surface) !important;
+    color: var(--ps-text) !important;
+    border-radius: 15px !important;
+    padding: 14px !important;
+    margin: 14px 0 22px !important;
+    box-shadow: none !important;
+
+    --background-base: var(--ps-surface) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-surface) !important;
+    --background-elevated-highlight: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-surface) !important;
+    --background-tinted-highlight: var(--ps-card-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-muted) !important;
+}
+
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) > .lA07rvvLfnD_3yCRTsq9 {
+    background: transparent !important;
+}
+
+.main-nowPlayingView .cYpycwKcTXHdtu4sNc6i {
+    background: transparent !important;
+    margin: 0 0 8px !important;
+}
+
+.main-nowPlayingView .cYpycwKcTXHdtu4sNc6i h2,
+.main-nowPlayingView .cYpycwKcTXHdtu4sNc6i button {
+    color: var(--ps-text) !important;
+}
+
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) {
+    background: transparent !important;
+    color: var(--ps-text) !important;
+    border-radius: 10px !important;
+    padding: 8px 6px !important;
+    transition: background-color .18s ease !important;
+}
+
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]):hover {
+    background: var(--ps-card-hover) !important;
+}
+
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) span,
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) p,
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) a {
+    color: var(--ps-text-soft) !important;
+}
+
+/* seguir */
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) button {
+    color: var(--ps-text) !important;
+    border-color: #C99BB5 !important;
+    background: transparent !important;
+    border-radius: 22px !important;
+}
+
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .lA07rvvLfnD_3yCRTsq9) [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) button:hover {
+    background: var(--ps-selected) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   14 · tocando agora: fila
+   ───────────────────────────────────────── */
+
+/* [instável] */
+.main-nowPlayingView section.iHJ6_yPvPOWhaNcXElNZ:has(> .main-nowPlayingView-queue) {
+    background: var(--ps-surface) !important;
+    color: var(--ps-text) !important;
+    border-radius: 15px !important;
+    padding: 14px !important;
+    margin: 14px 0 22px !important;
+    box-shadow: none !important;
+
+    --background-base: var(--ps-surface) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-surface) !important;
+    --background-elevated-highlight: var(--ps-card-hover) !important;
+    --background-tinted-base: var(--ps-surface) !important;
+    --background-tinted-highlight: var(--ps-card-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-muted) !important;
+}
+
+.main-nowPlayingView-queue {
+    background: transparent !important;
+    color: var(--ps-text) !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+}
+
+.main-nowPlayingView-queueHeader {
+    background: transparent !important;
+    padding: 2px 0 8px !important;
+    margin: 0 0 4px !important;
+}
+
+.main-nowPlayingView-queueHeader h2,
+.main-nowPlayingView-queueHeader button {
+    color: var(--ps-text) !important;
+}
+
+.main-nowPlayingView-queueItem,
+.main-nowPlayingView-queue [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]) {
+    background: transparent !important;
+    color: var(--ps-text) !important;
+    border-radius: 10px !important;
+    margin: 3px 0 !important;
+    transition: background-color .18s ease !important;
+}
+
+.main-nowPlayingView-queueItem:hover,
+.main-nowPlayingView-queue [class*="legacy-list-row"]:not([class*="list-row-title"]):not([class*="list-row-details"]):hover {
+    background: var(--ps-card-hover) !important;
+}
+
+.main-nowPlayingView-queueItem [class*="legacy-list-row-title"],
+.main-nowPlayingView-queueItem [class*="legacy-list-row-details"],
+.main-nowPlayingView-queueItem [data-encore-id="text"],
+.main-nowPlayingView-queue [class*="legacy-list-row-title"],
+.main-nowPlayingView-queue [class*="legacy-list-row-details"] {
+    color: var(--ps-text) !important;
+}
+
+.main-nowPlayingView-queueItem button,
+.main-nowPlayingView-queue button {
+    color: var(--ps-text) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   15 · player
+   ───────────────────────────────────────── */
+
+.Root__now-playing-bar,
+.main-nowPlayingBar-container {
+    background: var(--ps-player) !important;
+    border-top: 1px solid var(--ps-border) !important;
+    box-shadow: none !important;
+}
+
+.main-nowPlayingBar-nowPlaying,
+.main-nowPlayingBar-left,
+.main-nowPlayingBar-center,
+.main-nowPlayingBar-right,
+.main-nowPlayingWidget-trackInfo {
+    background: transparent !important;
+}
+
+.main-nowPlayingWidget-trackName {
+    color: var(--ps-text) !important;
+    font-weight: 650 !important;
+}
+
+.main-nowPlayingWidget-artistName {
+    color: var(--ps-muted) !important;
+    font-size: 12px !important;
+}
+
+.main-nowPlayingBar-button {
+    color: var(--ps-muted) !important;
+    transition: color .16s ease !important;
+}
+
+.main-nowPlayingBar-button:hover {
+    color: var(--ps-text) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   16 · progresso e volume
+   ───────────────────────────────────────── */
+
+.playback-bar,
+.playback-bar__progress-time {
+    color: var(--ps-muted) !important;
+}
+
+/* versão nova */
+.progress-bar {
+    --bg-color: #D8B8C8 !important;
+    --fg-color: #A96F8D !important;
+    --is-active-fg-color: var(--ps-accent-hover) !important;
+}
+
+/* versão antiga */
+.progress-bar__bg,
+.volume-bar__bg {
+    background: #D8B8C8 !important;
+}
+
+.progress-bar__fg,
+.volume-bar__fg {
+    background: #A96F8D !important;
+}
+
+.progress-bar__slider {
+    background: var(--ps-text) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   17 · botões de play
+   ───────────────────────────────────────── */
+
+
+.main-playButton-PlayButton {
+    background: var(--ps-accent) !important;
+    color: var(--ps-text) !important;
+    border-radius: 50% !important;
+}
+
+.main-playButton-PlayButton:hover {
+    background: var(--ps-accent-hover) !important;
+    transform: scale(1.04) !important;
+}
+
+/* miolo verde dos botões principais */
+[data-encore-id="buttonPrimary"] [class*="button-primary__inner"] {
+    background-color: var(--ps-accent) !important;
+    color: var(--ps-text) !important;
+}
+
+[data-encore-id="buttonPrimary"]:hover [class*="button-primary__inner"] {
+    background-color: var(--ps-accent-hover) !important;
+}
+
+/* cards, atalhos e biblioteca */
+.main-card-card .main-playButton-PlayButton,
+.main-card-cardContainer .main-playButton-PlayButton,
+.main-card-card button[class*="playButton"],
+.main-card-cardContainer button[class*="playButton"],
+.view-homeShortcutsGrid-playButton,
+.main-yourLibraryX-listItem .main-playButton-PlayButton button {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+    color: var(--ps-text) !important;
+    border: none !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: background-color .18s ease, transform .18s ease !important;
+}
+
+.main-yourLibraryX-listItem .main-playButton-PlayButton button {
+    border-radius: 50% !important;
+}
+
+.main-card-card .main-playButton-PlayButton:hover,
+.main-card-cardContainer .main-playButton-PlayButton:hover,
+.main-card-card button[class*="playButton"]:hover,
+.main-card-cardContainer button[class*="playButton"]:hover,
+.view-homeShortcutsGrid-playButton:hover,
+.main-yourLibraryX-listItem .main-playButton-PlayButton button:hover {
+    background: var(--ps-accent-hover) !important;
+    background-color: var(--ps-accent-hover) !important;
+    transform: scale(1.05) !important;
+}
+
+/* ícone sempre visível */
+.view-homeShortcutsGrid-playButton [class*="button__icon-wrapper"] {
+    display: inline-flex !important;
+}
+
+.main-card-card .main-playButton-PlayButton svg,
+.main-card-cardContainer .main-playButton-PlayButton svg,
+.main-card-card button[class*="playButton"] svg,
+.main-card-cardContainer button[class*="playButton"] svg,
+.view-homeShortcutsGrid-playButton svg,
+.main-yourLibraryX-listItem .main-playButton-PlayButton button svg {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    fill: var(--ps-text) !important;
+    color: var(--ps-text) !important;
+}
+
+.main-card-card .main-playButton-PlayButton svg path,
+.main-card-cardContainer .main-playButton-PlayButton svg path,
+.main-card-card button[class*="playButton"] svg path,
+.main-card-cardContainer button[class*="playButton"] svg path,
+.view-homeShortcutsGrid-playButton svg path,
+.main-yourLibraryX-listItem .main-playButton-PlayButton button svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.main-card-card:hover svg path,
+.main-card-cardContainer:hover svg path,
+.view-homeShortcutsGrid-shortcut:hover svg path {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+/* ─────────────────────────────────────────
+   17b · extras (equalizador, verdes, avisos, rádio)
+   ───────────────────────────────────────── */
+
+.x-settings-equalizerPanelCanvas {
+    filter: hue-rotate(200deg) saturate(.65) brightness(.75) !important;
+}
+
+
+/* barrinhas de tocando */
+img[src*="equaliser" i],
+img[src*="equalizer" i] {
+    content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><g fill='%23E9A8C8'><rect x='1' y='4' width='2' height='10' rx='1'><animate attributeName='height' values='10;4;12;6;10' dur='1.1s' repeatCount='indefinite'/><animate attributeName='y' values='4;10;2;8;4' dur='1.1s' repeatCount='indefinite'/></rect><rect x='4.5' y='4' width='2' height='10' rx='1'><animate attributeName='height' values='10;4;12;6;10' dur='0.8s' repeatCount='indefinite'/><animate attributeName='y' values='4;10;2;8;4' dur='0.8s' repeatCount='indefinite'/></rect><rect x='8' y='4' width='2' height='10' rx='1'><animate attributeName='height' values='10;4;12;6;10' dur='1.3s' repeatCount='indefinite'/><animate attributeName='y' values='4;10;2;8;4' dur='1.3s' repeatCount='indefinite'/></rect><rect x='11.5' y='4' width='2' height='10' rx='1'><animate attributeName='height' values='10;4;12;6;10' dur='0.95s' repeatCount='indefinite'/><animate attributeName='y' values='4;10;2;8;4' dur='0.95s' repeatCount='indefinite'/></rect></g></svg>") !important;
+}
+
+
+/* ícone do match (menu criar): parado era branco (sumia), hover era verde [instável] */
+[role="menu"] svg circle.EsT4QOjdWvbaEffSI3nD {
+    fill: var(--ps-muted) !important;
+}
+
+[role="menu"] svg circle.l_Ln8e98xI7ljn8H5sxF {
+    fill: var(--ps-text-soft) !important;
+}
+
+[role="menu"] :hover svg circle.EsT4QOjdWvbaEffSI3nD {
+    fill: var(--ps-card-hover) !important;
+}
+
+[role="menu"] :hover svg circle.l_Ln8e98xI7ljn8H5sxF {
+    fill: var(--ps-accent-strong) !important;
+}
+
+/* o "olho" no meio, onde as bolinhas se cruzam (era branco / verde-menta) */
+[role="menu"] svg path.Ags0262YLWorDd87KLq4 {
+    fill: var(--ps-bg) !important;
+}
+
+[role="menu"] :hover svg path.Ags0262YLWorDd87KLq4 {
+    fill: #F5C9DD !important;
+}
+
+/* animação verde ao salvar música: parte dela fica numa "caixinha fechada"
+   (shadow dom) e parte no próprio botão. o filtro vai no botão e no que tiver
+   em volta, pegando tudo: escurece um tiquinho, sépia (p/ cinza e branco tb
+   pegarem cor) e depois rosa. assim os tons claros viram rosa clarinho.
+   os tons do tema quase n mudam (+ continua vinho, salvo continua rosa) */
+:is([data-testid="now-playing-widget-v2"], .main-nowPlayingView-contextItemInfo) :has(> button:is([aria-label*="Adicionar" i], [aria-label*="Salvar" i], [aria-label*="Curtid" i])) {
+    filter: brightness(.7) sepia(1) hue-rotate(286deg) saturate(2.5) brightness(.9) !important;
+}
+
+/* coraçãozinho de "você curtiu" no perfil do artista:
+   bolinha na cor do fundo (parece um recorte na foto) c/ coração no rosa do play */
+[data-testid="saved-tracks-avatar"] > div:has(> svg) {
+    background: var(--ps-bg) !important;
+    background-color: var(--ps-bg) !important;
+    box-shadow: none !important;
+}
+
+[data-testid="saved-tracks-avatar"] > div:has(> svg) :is(svg, path) {
+    --encore-icon-fill: var(--ps-accent) !important;
+    fill: var(--ps-accent) !important;
+    color: var(--ps-accent) !important;
+}
+
+/* caça-verde */
+:is([fill="rgb(30,215,96)"], [fill="rgb(30, 215, 96)"], [fill="#1ed760" i], [fill="#1DB954" i], [fill="rgb(29,185,84)"], [fill="rgb(29, 185, 84)"]) {
+    fill: var(--ps-accent-strong) !important;
+}
+
+:is([stroke="rgb(30,215,96)"], [stroke="rgb(30, 215, 96)"], [stroke="#1ed760" i], [stroke="#1DB954" i], [stroke="rgb(29,185,84)"], [stroke="rgb(29, 185, 84)"]) {
+    stroke: var(--ps-accent-strong) !important;
+}
+
+
+/* anel em volta do play */
+.main-actionBar-ActionBarPlayButtonContainer svg stop {
+    stop-color: var(--ps-accent) !important;
+}
+
+.main-actionBar-ActionBarPlayButtonContainer svg circle[fill="#121212"] {
+    fill: transparent !important;
+}
+
+.main-actionBar-ActionBarPlayButtonContainer svg circle[stroke] {
+    stroke: var(--ps-accent-hover) !important;
+}
+
+/* balões de aviso (eram azuis) */
+.encore-announcement-set,
+.encore-dark-theme .encore-announcement-set {
+    --background-base: var(--ps-accent) !important;
+    --background-highlight: var(--ps-accent-hover) !important;
+    --background-press: var(--ps-accent-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-text-soft) !important;
+    --essential-base: var(--ps-text) !important;
+}
+
+[class*="legacy-popover"].encore-announcement-set,
+.encore-announcement-set[class*="popover"] {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+    color: var(--ps-text) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px -12px rgba(85, 55, 71, .35) !important;
+}
+
+/* moldura da capinha do rádio */
+:is(.main-actionBar-exploreButton, [data-testid="watch-feed-entity-button"]) > div:first-child:not(.main-actionBar-exploreButtonImageWrapper) {
+    display: none !important;
+}
+
+.main-actionBar-exploreButtonImageWrapper {
+    outline: 2px solid var(--ps-muted) !important;
+    outline-offset: 3px !important;
+    border-radius: 6px !important;
+    transition: outline-color .18s ease !important;
+}
+
+.main-actionBar-exploreButtonImageWrapper img {
+    border-radius: 4px !important;
+}
+
+:is(.main-actionBar-exploreButton, [data-testid="watch-feed-entity-button"]):hover .main-actionBar-exploreButtonImageWrapper {
+    outline-color: var(--ps-accent-strong) !important;
+}
+
+/* modal do rádio */
+[data-testid="watch-feed-view"],
+[data-testid="watch-feed-view"] * {
+    --text-subdued: var(--ps-text-soft) !important;
+    --essential-subdued: var(--ps-text-soft) !important;
+    --text-bright-accent: var(--ps-accent-strong) !important;
+    --essential-bright-accent: var(--ps-accent-strong) !important;
+}
+
+
+[data-testid="watch-feed-view"] button[class*="button-tertiary"] {
+    color: var(--ps-text-soft) !important;
+}
+
+[data-testid="watch-feed-view"] button[class*="button-tertiary"]:hover {
+    color: var(--ps-text) !important;
+}
+
+[data-testid="watch-feed-view"] button[class*="button-tertiary"] :is(svg, path) {
+    fill: currentColor !important;
+}
+
+/* ícones em cima do degradê */
+[data-testid="watch-feed-view"] div:has(> .main-watchFeed-shareButton) > button {
+    color: #FBEAF1 !important;
+    filter: drop-shadow(0 1px 3px rgba(35, 16, 27, .35)) !important;
+}
+
+[data-testid="watch-feed-view"] div:has(> .main-watchFeed-shareButton) > button:hover {
+    color: #FFFFFF !important;
+}
+
+/* salvo */
+[data-testid="watch-feed-view"] div:has(> .main-watchFeed-shareButton) > button.encore-internal-color-text-bright-accent,
+[data-testid="watch-feed-view"] div:has(> .main-watchFeed-shareButton) > button.encore-internal-color-text-bright-accent :is(svg, path) {
+    color: var(--ps-accent) !important;
+    fill: var(--ps-accent) !important;
+}
+
+/* letra expandida (modo cinema): o fundo da letra fica c/ a cor da capa
+   (do spotify); só a moldura preta em volta vira rosinha */
+.Root__cinema-view,
+.Root__lyrics-cinema,
+#lyrics-cinema {
+    background-color: var(--ps-bg) !important;
+}
+
+/* a borda preta era um contorno (outline) de 8px em volta da tela */
+.Root__cinema-view,
+.Root__cinema-view > * {
+    outline-color: var(--ps-bg) !important;
+}
+
+/* barra de cima da letra: fica sobre a cor escura da capa,
+   então título e ícones vão p/ rosa clarinho */
+[style*="--header-text-color"] {
+    --header-buttons-hover-bg: rgba(255, 255, 255, .16) !important;
+    --background-base: rgba(255, 255, 255, .16) !important;
+    --background-highlight: rgba(255, 255, 255, .24) !important;
+    --background-press: rgba(255, 255, 255, .28) !important;
+    --background-elevated-base: rgba(255, 255, 255, .16) !important;
+    --background-elevated-highlight: rgba(255, 255, 255, .24) !important;
+    --text-base: #FBEAF1 !important;
+    --text-subdued: rgba(251, 234, 241, .75) !important;
+    --essential-base: #FBEAF1 !important;
+    --essential-subdued: rgba(251, 234, 241, .75) !important;
+}
+
+[style*="--header-text-color"] a,
+[style*="--header-text-color"] a [data-encore-id="text"] {
+    color: #FBEAF1 !important;
+}
+
+[style*="--header-text-color"] button[class*="button-tertiary"] {
+    color: rgba(251, 234, 241, .75) !important;
+}
+
+[style*="--header-text-color"] button[class*="button-tertiary"]:hover {
+    color: #FFFFFF !important;
+}
+
+[style*="--header-text-color"] button[class*="button-tertiary"][aria-checked="true"] {
+    color: var(--ps-accent) !important;
+}
+
+[style*="--header-text-color"] button[class*="button-tertiary"]:disabled {
+    color: rgba(251, 234, 241, .3) !important;
+}
+
+[style*="--header-text-color"] button[class*="button-tertiary"] :is(svg, path) {
+    fill: currentColor !important;
+}
+
+/* sombra que aparece atrás da barra ao rolar a letra: rosa forte */
+[style*="--header-text-color"]::before {
+    background: linear-gradient(180deg, rgba(164, 95, 131, .92) 0%, rgba(164, 95, 131, .55) 55%, rgba(164, 95, 131, 0) 100%) !important;
+    box-shadow: none !important;
+    border-radius: 8px 8px 0 0 !important;   /* acompanha os cantos da tela */
+}
+
+/* "mudar para vídeo / áudio" e hover dos ícones: véu translúcido */
+[style*="--header-text-color"] button:is([aria-label*="vídeo" i], [aria-label*="áudio" i]) {
+    background: rgba(255, 255, 255, .16) !important;
+    color: #FBEAF1 !important;
+}
+
+[style*="--header-text-color"] button:is([aria-label*="vídeo" i], [aria-label*="áudio" i]):hover {
+    background: rgba(255, 255, 255, .26) !important;
+}
+
+[style*="--header-text-color"] button:is([aria-label*="vídeo" i], [aria-label*="áudio" i]) :is(svg, path, span) {
+    color: #FBEAF1 !important;
+    fill: currentColor !important;
+}
+
+[style*="--header-text-color"] button[class*="button-tertiary"]:hover {
+    background-color: rgba(255, 255, 255, .16) !important;
+}
+
+/* ─────────────────────────────────────────
+   17c · modais
+   ───────────────────────────────────────── */
+
+/* todos os balões de aviso (legacy-popover), qualquer conjunto de cor:
+   rosa c/ texto vinho, setinha junto */
+[class*="legacy-popover"]:not([class*="legacy-popover__"]) {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+    color: var(--ps-text) !important;
+    border-radius: 12px !important;
+    --background-base: var(--ps-accent) !important;
+    --background-highlight: var(--ps-accent-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-text-soft) !important;
+    --essential-base: var(--ps-text) !important;
+}
+
+[class*="legacy-popover"]:not([class*="legacy-popover__"]) :is(p, span, h1, h2, h3, div) {
+    color: var(--ps-text) !important;
+}
+
+[class*="legacy-popover"]::before,
+[class*="legacy-popover"]::after,
+[class*="legacy-popover__arrow"],
+[class*="popover-arrow" i] {
+    background-color: var(--ps-accent) !important;
+    border-color: var(--ps-accent) !important;
+    color: var(--ps-accent) !important;
+    fill: var(--ps-accent) !important;
+}
+
+/* x de fechar dos modais menores e balões (vinha azul) */
+button:is([aria-label^="Fechar modal" i], [class*="popover__close-button"]) {
+    color: var(--ps-text-soft) !important;
+    --text-subdued: var(--ps-text-soft) !important;
+}
+
+button:is([aria-label^="Fechar modal" i], [class*="popover__close-button"]):hover {
+    color: var(--ps-text) !important;
+}
+
+button:is([aria-label^="Fechar modal" i], [class*="popover__close-button"]) :is(svg, path) {
+    fill: currentColor !important;
+}
+
+/* botões redondos (fechar, próxima imagem) */
+dialog button[aria-label="Fechar"],
+[data-testid="close-button"],
+dialog button[aria-label*="imagem" i] {
+    background: var(--ps-card-hover) !important;
+    background-color: var(--ps-card-hover) !important;
+    color: var(--ps-text) !important;
+    --text-base: var(--ps-text) !important;
+    --essential-base: var(--ps-text) !important;
+    box-shadow: none !important;
+    transition: background-color .18s ease !important;
+}
+
+dialog button[aria-label="Fechar"]:hover,
+[data-testid="close-button"]:hover,
+dialog button[aria-label*="imagem" i]:hover {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+}
+
+dialog button[aria-label="Fechar"] :is(svg, path),
+[data-testid="close-button"] :is(svg, path),
+dialog button[aria-label*="imagem" i] :is(svg, path) {
+    fill: var(--ps-text) !important;
+    color: var(--ps-text) !important;
+}
+
+/* fotos ocupando a caixa toda */
+dialog ul:has(> li img) {
+    background: transparent !important;
+    background-color: transparent !important;
+    display: flex !important;
+    gap: 0 !important;
+}
+
+dialog ul:has(> li img) > li {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+dialog ul:has(> li img) > li img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    object-position: center 30% !important;
+}
+
+
+/* layout do modal do artista */
+
+
+dialog div:has(> div > div > .encore-text-title-medium) {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    column-gap: 32px !important;
+    row-gap: 18px !important;
+}
+
+
+dialog div:has(> div > .encore-text-title-medium) {
+    display: contents !important;
+}
+
+
+dialog div:has(> div > .encore-text-title-medium) > * {
+    order: 2 !important;
+    flex: 0 0 100% !important;
+    margin: 0 !important;
+}
+
+/* ranking em caixa */
+dialog div:has(> div > .encore-text-title-medium) > div:has(> .encore-text-marginal) {
+    order: 0 !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    border-radius: 10px !important;
+    padding: 18px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    text-align: center !important;
+}
+
+
+dialog div:has(> div > .encore-text-title-medium) > div:has(> .encore-text-marginal) > * {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+}
+
+/* postado por / verificado / registrado */
+dialog div:has(> div > div > .encore-text-title-medium) > div:not(:has(> div > .encore-text-title-medium)) {
+    order: 1 !important;
+    flex: 0 0 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+/* seguidores + ouvintes */
+dialog div:has(> div > .encore-text-title-medium) > div:has(> .encore-text-title-medium) {
+    flex: 1 1 calc(50% - 20px) !important;
+    min-width: 0 !important;
+    background: var(--ps-accent) !important;
+    padding: 18px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    border-radius: 10px 0 0 10px !important;
+}
+
+dialog div:has(> div > .encore-text-title-medium) > div:has(> .encore-text-title-medium) + div:has(> .encore-text-title-medium) {
+    border-radius: 0 10px 10px 0 !important;
+    border-left: 1px solid rgba(85, 55, 71, .18) !important;
+    margin-left: -32px !important;
+}
+
+dialog div:has(> div > .encore-text-title-medium) > div:has(> .encore-text-title-medium) > * {
+    color: var(--ps-text) !important;
+}
+
+/* cidades */
+dialog div:has(> div > .encore-text-title-medium) > div:has(> .encore-text-body-small-bold + .encore-text-body-small) {
+    flex: 0 0 auto !important;
+    text-align: center !important;
+}
+
+/* links */
+dialog div:has(> div > .encore-text-title-medium) > div:has(> a) {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px 28px !important;
+}
+
+/* ranking era azul */
+dialog div:has(> .encore-text-title-small):has(> .encore-text-marginal) {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+}
+
+dialog div:has(> .encore-text-title-small):has(> .encore-text-marginal) > * {
+    color: var(--ps-text) !important;
+}
+
+
+/* selo verificado no cabeçalho do artista (outro desenho, era verde).
+   não pega ícones que já usam o rosa do tema (bright-accent) */
+/* selo verificado do perfil do artista: estrela rosa (igual o play) e check vinho.
+   o check é vazado, então uma bolinha vinho atrás aparece só por ele */
+path[d^="M10.814.5"] {
+    fill: var(--ps-accent) !important;
+}
+
+svg:has(> path[d^="M10.814.5"]) {
+    filter: none !important;
+    opacity: 1 !important;
+    background: radial-gradient(circle at 50% 50%, var(--ps-text) 0 33%, transparent 34%) !important;
+    border-radius: 50% !important;
+}
+
+/* outros selos do cabeçalho que não sejam esses desenhos: filtro verde → rosa */
+:is(.main-entityHeader-container, [data-testid="entity-header"]) svg:not([style*="bright-accent"]):not(:has(path[d^="M7.155.406"])):not(:has(path[d^="M10.814.5"])) {
+    filter: hue-rotate(225deg) saturate(2.2) brightness(.82) !important;
+}
+
+/* selo do modal (outro desenho) */
+dialog :has(> .encore-text-body-small-bold) > svg:not(:has(path[d^="M7.155.406"])):not(:has(path[d^="M10.814.5"])):not(button *),
+dialog :has(> .encore-text-body-small-bold) > * > svg:not(:has(path[d^="M7.155.406"])):not(:has(path[d^="M10.814.5"])):not(button *) {
+    filter: hue-rotate(225deg) saturate(2.2) brightness(.82) !important;
+}
+
+/* destaque em cima de fundo escuro (era verde) */
+.encore-over-media-set,
+.encore-dark-theme .encore-over-media-set,
+.encore-medium-devices-theme,
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) {
+    --text-bright-accent: var(--ps-accent) !important;
+    --essential-bright-accent: var(--ps-accent) !important;
+    --text-positive: var(--ps-accent) !important;
+    --essential-positive: var(--ps-accent) !important;
+}
+
+.main-shelf-shelfGrid [class*="legacy-box--interactive"]:has([data-testid^="big-card"]) :is(.encore-internal-color-text-bright-accent, .encore-internal-color-text-positive, [class*="color-text-bright-accent"], [class*="color-text-positive"]),
+.main-shelf-shelfGrid .encore-medium-devices-theme :is(.encore-internal-color-text-bright-accent, .encore-internal-color-text-positive) {
+    color: var(--ps-accent) !important;
+}
+
+/* mini tema claro do spotify */
+.encore-light-theme,
+.encore-light-theme .encore-base-set {
+    --background-base: var(--ps-bg) !important;
+    --background-highlight: var(--ps-card-hover) !important;
+    --background-press: var(--ps-card-hover) !important;
+    --background-elevated-base: var(--ps-accent) !important;
+    --background-elevated-highlight: var(--ps-accent-hover) !important;
+    --text-base: var(--ps-text) !important;
+    --text-subdued: var(--ps-text-soft) !important;
+    --text-bright-accent: var(--ps-text) !important;
+    --essential-bright-accent: var(--ps-accent-strong) !important;
+    --text-positive: var(--ps-accent-strong) !important;
+    --essential-positive: var(--ps-accent-strong) !important;
+    --essential-base: var(--ps-text) !important;
+    --essential-subdued: var(--ps-text-soft) !important;
+    --essential-announcement: var(--ps-accent-strong) !important;
+    --text-announcement: var(--ps-accent-strong) !important;
+}
+
+/* aviso rápido (adicionado a...) */
+[data-encore-id="box"][class*="legacy-box--elevated"].encore-light-theme {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px -12px rgba(85, 55, 71, .4) !important;
+}
+
+[data-encore-id="box"][class*="legacy-box--elevated"].encore-light-theme svg,
+[data-encore-id="box"][class*="legacy-box--elevated"].encore-light-theme svg * {
+    fill: var(--ps-accent-strong) !important;
+    color: var(--ps-accent-strong) !important;
+}
+
+[data-encore-id="box"][class*="legacy-box--elevated"].encore-light-theme :is(span, button, a) {
+    color: var(--ps-text) !important;
+}
+
+[data-encore-id="box"][class*="legacy-box--elevated"].encore-light-theme button {
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 2px !important;
+}
+
+/* selo verificado */
+path[d^="M7.155.406"] {
+    fill: var(--ps-accent-strong) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   18 · botões e foco
+   ───────────────────────────────────────── */
+
+button {
+    transition: background-color .16s ease, color .16s ease, border-color .16s ease !important;
+}
+
+/* anel de foco (era azul) */
+:is(button, a, [role="button"], input):focus-visible {
+    outline: 2px solid var(--ps-accent-strong) !important;
+    outline-offset: 2px !important;
+}
+
+:is(button, a, [role="button"]):focus-visible :is([class*="button-primary__inner"], [class*="button-secondary__inner"]),
+:is(button, a, [role="button"]):focus-visible::after {
+    box-shadow: none !important;
+    outline-color: var(--ps-accent-strong) !important;
+    border-color: var(--ps-accent-strong) !important;
+}
+
+
+/* ─────────────────────────────────────────
+   19 · scrollbar e seleção
+   ───────────────────────────────────────── */
+
+::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--ps-scroll) !important;
+    border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--ps-scroll-hover) !important;
+}
+
+::selection {
+    background: var(--ps-accent) !important;
+    color: #45283A !important;
+}
+
+/* ---- card "sobre" do artista: texto clarinho por cima da foto ---- */
+:is(.artist-artistAbout-container, [class*="artistAbout"], [data-testid*="about" i]) [data-encore-id="text"]:not(dialog *),
+*:has(> [data-encore-id="text"].eZM78YYSOCTE1FTK4tKC) [data-encore-id="text"]:not(dialog *), /* [instável] */
+*:has(> * > [data-encore-id="text"].eZM78YYSOCTE1FTK4tKC) [data-encore-id="text"]:not(dialog *) {
+    color: #FBEAF1 !important;
+    --text-base: #FBEAF1 !important;
+    --text-subdued: #FBEAF1 !important;
+    text-shadow: 0 1px 6px rgba(40, 20, 30, .55);
+}
+
+/* no modal do artista o fundo é claro, então nada de texto clarinho nem sombra */
+dialog, dialog * { text-shadow: none !important; }
+
+/* bolinha "#68 no mundo" no card sobre: rosa em vez de azul */
+:is(.TEmA3Sau0tY3eoNjSYYz, button[style*="background-image"] > div:first-child:has(> .encore-text-title-small)), /* [instável] */
+:is(.TEmA3Sau0tY3eoNjSYYz, button[style*="background-image"] > div:first-child:has(> .encore-text-title-small))::before,
+:is(.TEmA3Sau0tY3eoNjSYYz, button[style*="background-image"] > div:first-child:has(> .encore-text-title-small))::after {
+    background: var(--ps-accent) !important;
+    background-color: var(--ps-accent) !important;
+    --background-base: var(--ps-accent) !important;
+    --essential-announcement: var(--ps-accent) !important;
+    --decorative-announcement: var(--ps-accent) !important;
+}
+:is(.TEmA3Sau0tY3eoNjSYYz.TEmA3Sau0tY3eoNjSYYz, button[style*="background-image"] > div:first-child:has(> .encore-text-title-small)) [data-encore-id="text"][data-encore-id="text"] {
+    color: var(--ps-text) !important;
+    text-shadow: none !important;
+}
+
+/* links da bio no card sobre (ex: "Jesse") */
+:is(.eZM78YYSOCTE1FTK4tKC, button[style*="background-image"] [data-encore-id="text"]) a:not(dialog *) { /* [instável] */
+    color: #FBEAF1 !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 2px;
+}
+
+/* pílula do "escolha do artista": rosinha claro com texto ameixa */
+:is(.zPnWjoVtjdvv2UXKYWlj, div:has(> figure[style*="width: 24px"] + span.standalone-ellipsis-one-line)) { /* [instável] */
+    background: var(--ps-card-hover) !important;
+    background-color: var(--ps-card-hover) !important;
+    color: var(--ps-text) !important;
+    --text-base: var(--ps-text) !important;
+    padding: 6px 14px 6px 6px !important;
+    gap: 10px !important;
+}
+:is(.zPnWjoVtjdvv2UXKYWlj, div:has(> figure[style*="width: 24px"] + span.standalone-ellipsis-one-line)) [data-encore-id="text"] {
+    color: var(--ps-text) !important;
+}
